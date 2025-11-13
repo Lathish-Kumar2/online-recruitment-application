@@ -46,9 +46,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        
-      <div className="w-full max-w-lg bg-white shadow-md rounded-xl p-8">
+    <div className="min-h-screen flex mt-10 justify-center bg-gray-50">
+
+      <div className="w-250 h-full overflow-hidden bg-white/40 backdrop-blur-md shadow-md rounded-xl p-8">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           {role === "employer" ? "Employer Registration" : "Candidate Registration"}
         </h2>
@@ -56,58 +56,57 @@ const SignUp = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {role === "employer" ? (
             <>
-              <div>
-                <label className="block mb-1 text-gray-700 font-medium">
-                  Organization Name
-                </label>
-                <input
-                  type="text"
-                  name="orgName"
-                  value={formData.orgName}
-                  onChange={handleChange}
-                  placeholder="Enter organization name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                />
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-1 text-gray-700 font-medium">Estd</label>
+                  <label className="block mb-2 text-black font-medium">
+                    Organization Name
+                  </label>
                   <input
-                    type="number"
+                    type="text"
+                    name="orgName"
+                    value={formData.orgName}
+                    onChange={handleChange}
+                    placeholder="Enter organization name"
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2 text-gray-700 font-medium">Established Year</label>
+                  <input
+                    type="text"
                     name="estd"
                     value={formData.estd}
                     onChange={handleChange}
                     placeholder="YYYY"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                   />
                 </div>
-
+              </div>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-1 text-gray-700 font-medium">Employees</label>
+                  <label className="block mb-2 text-gray-700 font-medium">Number of Employees</label>
                   <input
-                    type="number"
+                    type="text"
                     name="employees"
                     value={formData.employees}
                     onChange={handleChange}
                     placeholder="Number of employees"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block mb-1 text-gray-700 font-medium">
-                  Turnover (in ₹ or $)
-                </label>
-                <input
-                  type="text"
-                  name="turnover"
-                  value={formData.turnover}
-                  onChange={handleChange}
-                  placeholder="e.g., ₹10 Cr / $1M"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                />
+                <div>
+                  <label className="block mb-2 text-gray-700 font-medium">
+                    Turnover (in ₹)
+                  </label>
+                  <input
+                    type="text"
+                    name="turnover"
+                    value={formData.turnover}
+                    onChange={handleChange}
+                    placeholder="e.g., ₹10 Cr"
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  />
+                </div>
               </div>
             </>
           ) : (
@@ -120,7 +119,7 @@ const SignUp = () => {
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder="Enter your name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
               </div>
 
@@ -132,7 +131,7 @@ const SignUp = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Enter your phone number"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
               </div>
             </>
@@ -140,31 +139,31 @@ const SignUp = () => {
 
           {/* Common fields */}
           <div>
-            <label className="block mb-1 text-gray-700 font-medium">Email</label>
+            <label className="block mb-2 text-gray-700 font-medium">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           <div>
-            <label className="block mb-1 text-gray-700 font-medium">Password</label>
+            <label className="block mb-2 text-gray-700 font-medium">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           <div>
-            <label className="block mb-1 text-gray-700 font-medium">
+            <label className="block mb-2 text-gray-700 font-medium">
               Confirm Password
             </label>
             <input
@@ -173,13 +172,13 @@ const SignUp = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Re-enter password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+            className="w-100 ml-70 bg-indigo-600 text-white py-2 rounded-lg font-semibold cursor-pointer active:scale-95 hover:bg-indigo-700 transition"
           >
             Sign Up
           </button>
@@ -189,7 +188,7 @@ const SignUp = () => {
           Already have an account?{" "}
           <button
             onClick={() => navigate(`/login?role=${role}`)}
-            className="text-indigo-600 font-medium hover:underline"
+            className="text-indigo-600 font-bold hover:underline cursor-pointer text-md "
           >
             Login
           </button>

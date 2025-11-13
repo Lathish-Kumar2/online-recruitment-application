@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+* {
+        /* background-image: url('C:\FSAD Project\online-recruitment-application\frontend\online-recruitment-application\src\assets\background.png');
+    background-size: cover; */
+}
+
+button {
+    cursor: pointer;
+}
