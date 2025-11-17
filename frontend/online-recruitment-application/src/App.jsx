@@ -13,6 +13,9 @@ import InterviewSchedule from './pages/employer/InterviewsSchecule.jsx'
 import InterviewDetails from './pages/employer/InterviewDetails.jsx'
 import Reports from './pages/employer/Reports.jsx'
 import EmployerProfile from './pages/employer/EmployerProfile.jsx'
+import JobsPosted from './components/employer/JobsPosted.jsx'
+import ApplicationsReceived from './components/employer/ApplicationsReceived.jsx'
+
 
 
 
@@ -35,13 +38,14 @@ const App = () => {
             }
           />
           <Route path="/employer/post-job" element={<PostJob />} />
-
-
           <Route path="/employer/candidate-search" element={<CandidateSearch />} />
-          <Route path="/employer/interview-schedule" element={<InterviewSchedule/>} />
+          <Route path="/employer/interview-schedule" element={<InterviewSchedule />} />
           <Route path="/employer/interview-details" element={<InterviewDetails />} />
-          <Route path="/employer/profile" element={<EmployerProfile/>}/>
+          <Route path="/employer/profile" element={<EmployerProfile />} />
           <Route path="/employer/reports" element={<Reports />} />
+          <Route path="/employer/jobs-posted" element={<JobsPosted />} />
+          <Route path="/employer/applications-received" element={<ApplicationsReceived />} />
+
           <Route path="*" element={<NotFound />} />
 
         </Routes>

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 * {
-        /* background-image: url('C:\FSAD Project\online-recruitment-application\frontend\online-recruitment-application\src\assets\background.png');
-    background-size: cover; */
+    font-family: 'satoshi fallback', sans-serif;
+    /* font-family: 'mona sans', Arial, Helvetica, sans-serif; */
 }
 
 button {
