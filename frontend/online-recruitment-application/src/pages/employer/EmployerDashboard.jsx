@@ -166,6 +166,7 @@
 // export default EmployerDashboard;
 
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import EmployerNavBar from "../../components/employer/EmployerNavBar";
 import EmployerSideBar from "../../components/employer/EmployerSideBar";
 import { Briefcase, Users, Calendar, User } from "lucide-react";
@@ -175,6 +176,7 @@ const EmployerDashboard = () => {
 
     const navigate = useNavigate();
     const date = new Date();
+    const { employerId } = useParams();
 
     // Mock Stats = Later backend API will update these
     const stats = [

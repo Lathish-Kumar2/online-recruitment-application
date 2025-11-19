@@ -30,21 +30,21 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           {/* <Route path="/employer/dashboard" element={<EmployerDashboard />} /> */}
           <Route
-            path="/employer/dashboard"
+            path="/employer/:employerId/dashboard"
             element={
               <ProtectedRoute allowedRole="employer">
                 <EmployerDashboard />
               </ProtectedRoute>
             }
           />
-          <Route path="/employer/post-job" element={<PostJob />} />
-          <Route path="/employer/candidate-search" element={<CandidateSearch />} />
-          <Route path="/employer/interview-schedule" element={<InterviewSchedule />} />
-          <Route path="/employer/interview-details" element={<InterviewDetails />} />
-          <Route path="/employer/profile" element={<EmployerProfile />} />
-          <Route path="/employer/reports" element={<Reports />} />
-          <Route path="/employer/jobs-posted" element={<JobsPosted />} />
-          <Route path="/employer/applications-received" element={<ApplicationsReceived />} />
+          <Route path="/employer/:employerId/post-job" element={<PostJob />} />
+          <Route path="/employer/:employerId/candidate-search" element={<CandidateSearch />} />
+          <Route path="/employer/:employerId/interview-schedule" element={<InterviewSchedule />} />
+          <Route path="/employer/:employerId/interview-details" element={<InterviewDetails />} />
+          <Route path="/employer/:employerId/profile" element={<EmployerProfile />} />
+          <Route path="/employer/:employerId/reports" element={<Reports />} />
+          <Route path="/employer/:employerId/jobs-posted" element={<JobsPosted />} />
+          <Route path="/employer/:employerId/applications-received" element={<ApplicationsReceived />} />
 
           <Route path="*" element={<NotFound />} />
 

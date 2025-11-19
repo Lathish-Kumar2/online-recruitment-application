@@ -3,7 +3,7 @@ package com.recruitmentapplication.dto;
 import lombok.Data;
 
 @Data
-public class EmployerSignupRequest {
+class EmployerSignUpDTO {
     private String email;
     private String password;
     private String companyName;

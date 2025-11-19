@@ -1,10 +1,19 @@
 import EmployerNavBar from "../../components/employer/EmployerNavBar";
 import EmployerSideBar from "../../components/employer/EmployerSideBar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
+
+
 
 
 const EmployerProfile = () => {
+
+    const { id } = useParams();
+    const employerId = JSON.parse(localStorage.getItem("user"))?.id;
+
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -15,6 +24,23 @@ const EmployerProfile = () => {
         email: "",
     });
 
+
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (user) {
+            setFormData({
+                orgName: user.companyName,
+                estd: user.estd,
+                employees: user.employees,
+                turnover: user.turnover,
+                email: user.email
+            });
+        }
+    }, []);
+
+
     const [profileSaved, setProfileSaved] = useState(false);
 
     const handleChange = (e) => {
@@ -22,12 +48,37 @@ const EmployerProfile = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+        const updatedData = {
+            id: employerId,
+            companyName: formData.orgName,
+            estd: formData.estd,
+            employees: formData.employees,
+            turnover: formData.turnover,
+            email: formData.email
+        };
+
+        const res = await axios.put(
+            `http://localhost:8080/employer/update/${employerId}`,
+            updatedData
+        );
+
+        // ⭐ Update localStorage so dashboard/user sees updated info
+        localStorage.setItem("user", JSON.stringify(res.data));
+
         setProfileSaved(true);
-        alert("✅ Profile details saved successfully!");
-        console.log("Employer Profile Data:", formData);
-    };
+        alert("✅ Profile updated successfully!");
+        console.log("Updated Employer Profile:", res.data);
+
+    } catch (error) {
+        console.error(error);
+        alert("❌ Update failed. Please try again.");
+    }
+};
+
 
     return (
         <div className="bg-white h-screen w-full px-15 py-3">
@@ -145,7 +196,7 @@ const EmployerProfile = () => {
                             <div className="flex justify-between mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/employer/dashboard")}
+                                    onClick={() => navigate(`/employer/${employerId}/dashboard`)}
                                     className="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg hover:bg-gray-300 transition"
                                 >
                                     ← Back

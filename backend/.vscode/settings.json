@@ -1,0 +1,45 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhb36qwtzdg75fukpve8bv-mysql.services.clever-cloud.comost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "recruitmentdb",
+            "database": "b36qwtzdg75fukpve8bv",
+            "username": "uemfglkvgfbtjbyi"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "b36qwtzdg75fukpve8bv-mysql.services.clever-cloud.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "recruitmentAppDB",
+            "database": "b36qwtzdg75fukpve8bv",
+            "username": "uemfglkvgfbtjbyi",
+            "password": "YznQ57SNCKRS6zkMuOC6"
+        },
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "recruitmentApplication",
+            "database": "postgres",
+            "username": "postgres.hrwuaadxtslcygffgfnc",
+            "password": "passwordforrecdatabse"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+### Employer Signup Test
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "hr@gmail.com",
+  "password": "123456",
+  "companyName": "Infosys",
+  "estd": 1981,
+  "employees": 10000,
+  "turnover": 35000,
+  "fullName": "Ravi Kumar",
+  "phone": "9876543210"
+}

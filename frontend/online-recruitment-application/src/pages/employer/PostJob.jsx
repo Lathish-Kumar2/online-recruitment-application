@@ -56,11 +56,11 @@ const PostJob = () => {
     };
 
     return (
-        <div className="bg-white w-full px-15 py-3">
+        <div className="bg-white h-screen w-full px-15 py-3">
             <EmployerNavBar />
             <div className=" h-[90%] flex">
                 <EmployerSideBar />
-                <div className="h-full w-full bg-gray-200 rounded-tl-4xl p-10">
+                <div className="h-full w-full bg-gray-200 rounded-tl-4xl p-10 overflow-y-scroll">
                         <h2 className="text-2xl font-bold text-center text-violet-800 mb-6">
                             Post a New Job
                         </h2>

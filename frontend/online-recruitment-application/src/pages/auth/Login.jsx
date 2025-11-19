@@ -9,14 +9,9 @@ const Login = () => {
   const role1 = searchParams.get("type") || "candidate";
   const role2 = searchParams.get("role") || "candidate";
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // ✅ Access AuthContext
+  const { login } = useContext(AuthContext);
 
-  let role;
-  if (role1 === role2) {
-    role = "candidate";
-  } else {
-    role = "employer";
-  }
+  let role = role1 === role2 ? "candidate" : "employer";
 
   const [formData, setFormData] = useState({
     email: "",
@@ -31,7 +26,7 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -39,19 +34,33 @@ const Login = () => {
       return;
     }
 
-    // ✅ Mock login success (replace with actual backend auth later)
-    toast.success(`Logged in as ${role}`);
+    try {
+      const res = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    // ✅ Save login info globally + in localStorage
-    login({
-      email: formData.email,
-      role: role,
-    });
+      if (!res.ok) {
+        toast.error("Invalid email or password");
+        return;
+      }
 
-    // ✅ Redirect after login
-    setTimeout(() => {
-      navigate(`/${role}/dashboard`);
-    }, 1500);
+      const user = await res.json();
+
+      toast.success("Login successful!");
+
+      // Store user globally
+      login(user);
+
+      // Redirect to employer dashboard
+      setTimeout(() => {
+        navigate(`/employer/${user.id}/dashboard`);
+
+      }, 1200);
+    } catch (err) {
+      toast.error("Server error. Try again!");
+    }
   };
 
   return (
@@ -88,7 +97,7 @@ const Login = () => {
                   className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
                 <button
-                  onClick={() => navigate(`/forgot-password?role=${role}`)} // ✅ preserves role
+                  onClick={() => navigate(`/forgot-password?role=${role}`)}
                   className="text-sm text-gray-500 hover:text-indigo-600 cursor-pointer ml-5"
                 >
                   Forgot Password?

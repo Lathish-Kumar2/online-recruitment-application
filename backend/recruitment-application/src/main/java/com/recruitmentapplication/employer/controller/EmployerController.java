@@ -9,26 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api/auth")
-public class EmployerAuthController {
+@RequestMapping("/employer")
+public class EmployerController {
 
     @Autowired
     private EmployerService service;
 
-    @PostMapping("/signup")
-    public Employer signup(@RequestBody EmployerSignupRequest employer) {
-        return service.signup(employer);
+    @PutMapping("/update/{id}")
+    public Employer updateEmployer(@PathVariable Long id, @RequestBody Employer employer) {
+        return service.updateEmployer(id, employer);
     }
-
-    @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody Employer req) {
-    Employer emp = service.login(req.getEmail(), req.getPassword());
-
-    if (emp == null) {
-        return ResponseEntity.status(401).body("Invalid email or password");
-    }
-
-    return ResponseEntity.ok(emp);
-}
 
 }

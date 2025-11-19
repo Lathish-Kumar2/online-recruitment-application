@@ -1,4 +1,4 @@
-package com.recruitment_application.recruitment_application;
+package com.recruitmentapplication;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

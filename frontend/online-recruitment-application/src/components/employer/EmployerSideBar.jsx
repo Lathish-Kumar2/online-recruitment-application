@@ -88,6 +88,9 @@ import { CgProfile } from "react-icons/cg";
 import { HiOutlineLogout } from "react-icons/hi";
 
 const EmployerSideBar = () => {
+
+  const employerId = JSON.parse(localStorage.getItem("user"))?.id;
+
   
   const linkClasses = ({ isActive }) =>
     `text-left h-12 active:scale-98 px-3 py-2 rounded-md transition flex items-center gap-2 w-66 ${isActive
@@ -98,34 +101,34 @@ const EmployerSideBar = () => {
   return (
     <div className="bg-white h-full w-70 py-5 px-5 gap-5 flex flex-col justify-between">
       <div className="flex flex-col space-y-3 gap-2">
-        <NavLink to="/employer/dashboard" className={linkClasses}>
+        <NavLink to={`/employer/${employerId}/dashboard`} className={linkClasses}>
           <MdDashboard size={25} /> Dashboard
         </NavLink>
 
-        <NavLink to="/employer/post-job" className={linkClasses}>
+        <NavLink to={`/employer/${employerId}/post-job`} className={linkClasses}>
           <MdCreateNewFolder size={25} /> Post Job
         </NavLink>
 
-        <NavLink to="/employer/candidate-search" className={linkClasses}>
+        <NavLink to={`/employer/${employerId}/candidate-search`} className={linkClasses}>
           <FaUsers size={25} /> Candidates
         </NavLink>
 
-        <NavLink to="/employer/interview-schedule" className={linkClasses}>
+        <NavLink to={`/employer/${employerId}/interview-schedule`} className={linkClasses}>
           <RiCalendarScheduleFill size={25} /> Schedule Interviews
         </NavLink>
 
-        <NavLink to="/employer/interview-details" className={linkClasses}>
+        <NavLink to={`/employer/${employerId}/interview-details`} className={linkClasses}>
           <MdMore size={25} /> Interview Status and <br /> details
         </NavLink>
 
-        <NavLink to="/employer/reports" className={linkClasses}>
+        <NavLink to={`/employer/${employerId}/reports`}className={linkClasses}>
           <BiSolidReport size={25} /> Reports
         </NavLink>
       </div>
 
       <div className="flex flex-col h-30 items-center justify-center gap-5 border-t border-gray-400">
         <NavLink
-          to="/employer/profile"
+          to={`/employer/${employerId}/profile`}
           className={({ isActive }) =>
             `px-2 flex items-center gap-2 bg-white/40 backdrop-blur-md w-3/4 h-10 text-black font-semibold rounded-md hover:bg-gray-100 transition ${isActive ? "bg-violet-500 text-white font-bold" : ""
             }`
