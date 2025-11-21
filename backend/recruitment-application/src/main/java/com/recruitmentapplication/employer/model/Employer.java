@@ -25,13 +25,13 @@ public class Employer {
 
     private Integer estd;        
     private Integer employees;   
-    private Double turnover;     
+    private String turnover;     
     private String fullName;    
     private String phone; 
     private String role = "employer";
 
     
-    public Employer(String email, String password, String companyName, Integer estd, Integer employees, Double turnover, String fullName, String phone) {
+    public Employer(String email, String password, String companyName, Integer estd, Integer employees, String turnover, String fullName, String phone) {
         this.email = email;
         this.password = password;
         this.companyName = companyName;
@@ -90,11 +90,11 @@ public class Employer {
         this.employees = employees;
     }
 
-    public Double getTurnover() {
+    public String getTurnover() {
         return turnover;
     }
 
-    public void setTurnover(Double turnover) {
+    public void setTurnover(String turnover) {
         this.turnover = turnover;
     }
 

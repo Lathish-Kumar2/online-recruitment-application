@@ -9,7 +9,7 @@ class EmployerSignUpDTO {
     private String companyName;
     private Integer estd;
     private Integer employees;
-    private Double turnover;
+    private String turnover;
     private String fullName;
     private String phone;
 }

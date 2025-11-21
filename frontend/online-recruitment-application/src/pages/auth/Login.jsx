@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
+import { TextField } from "@mui/material"
 
 const Login = () => {
   const [searchParams] = useSearchParams();
@@ -75,19 +76,29 @@ const Login = () => {
             <div className="bg-[url('src/assets/login1.png')] bg-cover h-full"></div>
             <div className="h-full flex flex-col justify-center py-4 space-y-4">
               <div>
-                <label className="block mb-2 text-black">Email</label>
-                <input
+                {/* <label className="block mb-2 text-black">Email</label> */}
+                {/* <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
                   className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                /> */}
+
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  name="email"
                 />
               </div>
 
               <div>
-                <label className="block mb-1 text-gray-700 font-medium">Password</label>
+                {/* <label className="block mb-1 text-gray-700 font-medium">Password</label>
                 <input
                   type="password"
                   name="password"
@@ -95,10 +106,20 @@ const Login = () => {
                   onChange={handleChange}
                   placeholder="Enter your password"
                   className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                /> */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  name="password"
                 />
                 <button
                   onClick={() => navigate(`/forgot-password?role=${role}`)}
-                  className="text-sm text-gray-500 hover:text-indigo-600 cursor-pointer ml-5"
+                  className="text-sm text-gray-500 hover:text-indigo-600 cursor-pointer "
                 >
                   Forgot Password?
                 </button>

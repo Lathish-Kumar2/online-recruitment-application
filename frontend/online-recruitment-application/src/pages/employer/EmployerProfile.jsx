@@ -86,7 +86,7 @@ const EmployerProfile = () => {
             <div className=" h-[90%] flex">
                 <EmployerSideBar />
                 <div className="h-full w-full bg-gray-200 rounded-tl-4xl p-10">
-                    <div className="bg-white/60 backdrop-blur-md shadow-md rounded-xl p-8 w-[800px]">
+                    
 
                         <h2 className="text-2xl font-semibold text-center text-indigo-700 mb-6">
                             Employer Profile
@@ -213,7 +213,7 @@ const EmployerProfile = () => {
                     </div>
                 </div>
             </div>
-        </div>
+       
     );
 };
 

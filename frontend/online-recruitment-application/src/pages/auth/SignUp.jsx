@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { TextField } from "@mui/material";
 
 const SignUp = () => {
   const [searchParams] = useSearchParams();
@@ -12,12 +14,13 @@ const SignUp = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    orgName: "",
+    companyName: "",
     estd: "",
     employees: "",
     turnover: "",
     fullName: "",
     phone: "",
+
   });
 
   useEffect(() => {
@@ -28,8 +31,10 @@ const SignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+
 
     if (!formData.email || !formData.password || !formData.confirmPassword) {
       toast.error("Please fill in all required fields!");
@@ -41,9 +46,42 @@ const SignUp = () => {
       return;
     }
 
-    toast.success(`${role} account created successfully!`);
-    setTimeout(() => navigate(`/login?role=${role}`), 1500);
+    try {
+      let response;
+
+      if (role === "employer") {
+        response = await axios.post("http://localhost:8080/api/auth/signup", {
+          companyName: formData.companyName,
+          estd: formData.estd,
+          employees: formData.employees,
+          turnover: formData.turnover,
+          email: formData.email,
+          password: formData.password,
+          fullName: "Employer Admin",
+          phone: formData.phone,
+
+        });
+      } else {
+        // response = await axios.post("http://localhost:8080/api/candidates/signup", {
+        //   fullName: formData.fullName,
+        //   phone: formData.phone,
+        //   email: formData.email,
+        //   password: formData.password,
+        // });
+        window.alert("Candidate signup is currently disabled.");
+        return;
+      }
+
+      toast.success("Account created successfully!");
+
+      setTimeout(() => navigate(`/login?role=${role}`), 1500);
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Signup failed!");
+    }
   };
+
 
   return (
     <div className="min-h-screen flex mt-10 justify-center bg-gray-50">
@@ -58,33 +96,49 @@ const SignUp = () => {
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-2 text-black font-medium">
+                  {/* <label className="block mb-2 text-black font-medium">
                     Organization Name
                   </label>
                   <input
                     type="text"
-                    name="orgName"
-                    value={formData.orgName}
+                    name="companyName"
+                    value={formData.companyName}
                     onChange={handleChange}
                     placeholder="Enter organization name"
                     className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  /> */}
+                  <TextField
+                    margin="normal"
+                    label="Organization Name"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    name="companyName"
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-gray-700 font-medium">Established Year</label>
-                  <input
-                    type="text"
-                    name="estd"
+                  {/* <label className="block mb-2 text-gray-700 font-medium">Established Year</label>
+                <input
+                  type="text"
+                  name="estd"
+                  value={formData.estd}
+                  onChange={handleChange}
+                  placeholder="YYYY"
+                  className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                /> */}
+                  <TextField
+                    margin="normal"
+                    label="Established Year"
                     value={formData.estd}
                     onChange={handleChange}
-                    placeholder="YYYY"
-                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none "
+                    name="estd"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-2 text-gray-700 font-medium">Number of Employees</label>
+                  {/* <label className="block mb-2 text-gray-700 font-medium">Number of Employees</label>
                   <input
                     type="text"
                     name="employees"
@@ -92,10 +146,18 @@ const SignUp = () => {
                     onChange={handleChange}
                     placeholder="Number of employees"
                     className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  /> */}
+                  <TextField
+                    margin="normal"
+                    label="Number of Employees"
+                    value={formData.employees}
+                    onChange={handleChange}
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none "
+                    name="employees"
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-gray-700 font-medium">
+                  {/* <label className="block mb-2 text-gray-700 font-medium">
                     Turnover (in ₹)
                   </label>
                   <input
@@ -105,6 +167,14 @@ const SignUp = () => {
                     onChange={handleChange}
                     placeholder="e.g., ₹10 Cr"
                     className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                  /> */}
+                  <TextField
+                    margin="normal"
+                    label="Turnover (in ₹), e.g., ₹10 Cr"
+                    value={formData.turnover}
+                    onChange={handleChange}
+                    className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none "
+                    name="turnover"
                   />
                 </div>
               </div>
@@ -112,7 +182,7 @@ const SignUp = () => {
           ) : (
             <>
               <div>
-                <label className="block mb-1 text-gray-700 font-medium">Full Name</label>
+                {/* <label className="block mb-1 text-gray-700 font-medium">Full Name</label>
                 <input
                   type="text"
                   name="fullName"
@@ -120,11 +190,19 @@ const SignUp = () => {
                   onChange={handleChange}
                   placeholder="Enter your name"
                   className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                /> */}
+                <TextField
+                  margin="normal"
+                  label="Full Name"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none "
+                  name="fullName"
                 />
               </div>
 
               <div>
-                <label className="block mb-1 text-gray-700 font-medium">Phone</label>
+                {/* <label className="block mb-1 text-gray-700 font-medium">Phone</label>
                 <input
                   type="tel"
                   name="phone"
@@ -132,6 +210,14 @@ const SignUp = () => {
                   onChange={handleChange}
                   placeholder="Enter your phone number"
                   className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                /> */}
+                <TextField
+                  margin="normal"
+                  label="Phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none "
+                  name="phone"
                 />
               </div>
             </>
@@ -139,7 +225,7 @@ const SignUp = () => {
 
           {/* Common fields */}
           <div>
-            <label className="block mb-2 text-gray-700 font-medium">Email</label>
+            {/* <label className="block mb-2 text-gray-700 font-medium">Email</label>
             <input
               type="email"
               name="email"
@@ -147,11 +233,19 @@ const SignUp = () => {
               onChange={handleChange}
               placeholder="Enter your email"
               className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            /> */}
+            <TextField
+              margin="normal"
+              label="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none "
+              name="email"
             />
           </div>
 
           <div>
-            <label className="block mb-2 text-gray-700 font-medium">Password</label>
+            {/* <label className="block mb-2 text-gray-700 font-medium">Password</label>
             <input
               type="password"
               name="password"
@@ -159,11 +253,19 @@ const SignUp = () => {
               onChange={handleChange}
               placeholder="Enter password"
               className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            /> */}
+            <TextField
+              margin="normal"
+              label="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none "
+              name="password"
             />
           </div>
 
           <div>
-            <label className="block mb-2 text-gray-700 font-medium">
+            {/* <label className="block mb-2 text-gray-700 font-medium">
               Confirm Password
             </label>
             <input
@@ -173,6 +275,14 @@ const SignUp = () => {
               onChange={handleChange}
               placeholder="Re-enter password"
               className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            /> */}
+            <TextField
+              margin="normal"
+              label="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-100 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              name="confirmPassword"
             />
           </div>
 
@@ -196,7 +306,7 @@ const SignUp = () => {
 
         <ToastContainer position="top-center" />
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import EmployerNavBar from "../../components/employer/EmployerNavBar.jsx";
 import EmployerSideBar from "../../components/employer/EmployerSideBar.jsx";
+import axios from "axios";
 
 const PostJob = () => {
     const [jobData, setJobData] = useState({
@@ -14,9 +15,12 @@ const PostJob = () => {
         jobType: "",
         location: "",
         description: "",
+        datePosted: new Date().toISOString().split("T")[0],
     });
 
     const navigate = useNavigate();
+    // const {employerId} = useParams();
+    const employerId = JSON.parse(localStorage.getItem("user"))?.id;
 
     useEffect(() => {
         document.title = "Post Job - Employer";
@@ -26,8 +30,14 @@ const PostJob = () => {
         setJobData({ ...jobData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!employerId) {
+            alert("You must be logged in as an employer to post a job.");
+            return;
+        }
+
 
         if (
             !jobData.jobTitle ||
@@ -41,8 +51,16 @@ const PostJob = () => {
             return;
         }
 
-        toast.success("✅ Job posted successfully!");
-        setTimeout(() => navigate("/employer/dashboard"), 2000);
+        try {
+            await axios.post("http://localhost:8080/api/job/create", { ...jobData, employerId: employerId });
+            toast.success("Job posted successfully!");
+            // setTimeout(() => navigate(`/employer/${employerId}/dashboard`), 2000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to post job");
+        }
+
 
         setJobData({
             jobTitle: "",
@@ -60,136 +78,136 @@ const PostJob = () => {
             <EmployerNavBar />
             <div className=" h-[90%] flex">
                 <EmployerSideBar />
-                <div className="h-full w-full bg-gray-200 rounded-tl-4xl p-10 overflow-y-scroll">
-                        <h2 className="text-2xl font-bold text-center text-violet-800 mb-6">
-                            Post a New Job
-                        </h2>
+                <div className="h-full w-full bg-gray-200 rounded-tl-4xl p-10 overflow-y-auto">
+                    <h2 className="text-2xl font-bold text-center text-violet-800 mb-6">
+                        Post a New Job
+                    </h2>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Job Title & Designation */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block mb-1 text-gray-700 font-medium">
-                                        Job Title
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="jobTitle"
-                                        value={jobData.jobTitle}
-                                        onChange={handleChange}
-                                        placeholder="e.g., Software Engineer"
-                                        className="w-full px-4 py-3 border bg-white/90 border-gray-500 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block mb-1 text-gray-700 font-medium">
-                                        Designation
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="designation"
-                                        value={jobData.designation}
-                                        onChange={handleChange}
-                                        placeholder="e.g., Developer"
-                                        className="w-full px-4 py-3 border bg-white/90 border-gray-500 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Salary & Qualification */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block mb-1 text-gray-700 font-medium">
-                                        Salary (₹)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="salary"
-                                        value={jobData.salary}
-                                        onChange={handleChange}
-                                        placeholder="e.g., ₹6 LPA"
-                                        className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block mb-1 text-gray-700 font-medium">
-                                        Qualification
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="qualification"
-                                        value={jobData.qualification}
-                                        onChange={handleChange}
-                                        placeholder="e.g., B.E / B.Tech / MCA"
-                                        className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Job Type & Location */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block mb-1 text-gray-700 font-medium">
-                                        Job Type
-                                    </label>
-                                    <select
-                                        name="jobType"
-                                        value={jobData.jobType}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none"
-                                    >
-                                        <option value="">Select Type</option>
-                                        <option value="Permanent">Permanent</option>
-                                        <option value="Temporary">Temporary</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block mb-1 text-gray-700 font-medium">
-                                        Location
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="location"
-                                        value={jobData.location}
-                                        onChange={handleChange}
-                                        placeholder="e.g., Bangalore"
-                                        className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Description */}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        {/* Job Title & Designation */}
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block mb-1 text-gray-700 font-medium">
-                                    Job Description
+                                    Job Title
                                 </label>
-                                <textarea
-                                    name="description"
-                                    value={jobData.description}
+                                <input
+                                    type="text"
+                                    name="jobTitle"
+                                    value={jobData.jobTitle}
                                     onChange={handleChange}
-                                    placeholder="Enter job responsibilities and requirements..."
-                                    className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none h-32 resize-none"
+                                    placeholder="e.g., Software Engineer"
+                                    className="w-full px-4 py-3 border bg-white/90 border-gray-500 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                                 />
                             </div>
 
-                            {/* Submit Button */}
-                            <button
-                                type="submit"
-                                className="w-full bg-violet-400 text-white py-3 rounded-lg font-semibold cursor-pointer active:scale-95 hover:bg-violet-700 transition"
-                            >
-                                Post Job
-                            </button>
-                        </form>
+                            <div>
+                                <label className="block mb-1 text-gray-700 font-medium">
+                                    Designation
+                                </label>
+                                <input
+                                    type="text"
+                                    name="designation"
+                                    value={jobData.designation}
+                                    onChange={handleChange}
+                                    placeholder="e.g., Developer"
+                                    className="w-full px-4 py-3 border bg-white/90 border-gray-500 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                />
+                            </div>
+                        </div>
 
-                        <ToastContainer position="top-center" />
-                    </div>
+                        {/* Salary & Qualification */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block mb-1 text-gray-700 font-medium">
+                                    Salary (₹)
+                                </label>
+                                <input
+                                    type="text"
+                                    name="salary"
+                                    value={jobData.salary}
+                                    onChange={handleChange}
+                                    placeholder="e.g., ₹6 LPA"
+                                    className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                />
+                            </div>
 
+                            <div>
+                                <label className="block mb-1 text-gray-700 font-medium">
+                                    Qualification
+                                </label>
+                                <input
+                                    type="text"
+                                    name="qualification"
+                                    value={jobData.qualification}
+                                    onChange={handleChange}
+                                    placeholder="e.g., B.E / B.Tech / MCA"
+                                    className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Job Type & Location */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block mb-1 text-gray-700 font-medium">
+                                    Job Type
+                                </label>
+                                <select
+                                    name="jobType"
+                                    value={jobData.jobType}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-violet-500 outline-none"
+                                >
+                                    <option value="">Select Type</option>
+                                    <option value="Permanent">Permanent</option>
+                                    <option value="Temporary">Temporary</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block mb-1 text-gray-700 font-medium">
+                                    Location
+                                </label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={jobData.location}
+                                    onChange={handleChange}
+                                    placeholder="e.g., Bangalore"
+                                    className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Description */}
+                        <div>
+                            <label className="block mb-1 text-gray-700 font-medium">
+                                Job Description
+                            </label>
+                            <textarea
+                                name="description"
+                                value={jobData.description}
+                                onChange={handleChange}
+                                placeholder="Enter job responsibilities and requirements..."
+                                className="w-full px-4 py-3 border border-gray-500 bg-white/90 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none h-32 resize-none"
+                            />
+                        </div>
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            className="w-full bg-violet-400 text-white py-3 rounded-lg font-semibold cursor-pointer active:scale-95 hover:bg-violet-700 transition"
+                        >
+                            Post Job
+                        </button>
+                    </form>
+
+                    <ToastContainer position="top-center" />
                 </div>
 
-                {/* Back Button
+            </div>
+
+            {/* Back Button
                 <button
                     onClick={() => navigate("/employer/dashboard")}
                     className="absolute top-6 left-10 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition font-medium shadow-sm"
@@ -198,8 +216,8 @@ const PostJob = () => {
                 </button> */}
 
 
-            </div>
-    
+        </div>
+
     );
 };
 

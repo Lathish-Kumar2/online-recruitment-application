@@ -28,6 +28,7 @@ public class EmployerService {
         employer.setFullName(dto.getFullName());
         employer.setPhone(dto.getPhone());
         employer.setRole("employer");
+        
 
 
         return repository.save(employer);

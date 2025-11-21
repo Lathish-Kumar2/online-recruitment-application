@@ -33,7 +33,7 @@ const Reports = () => {
             <EmployerNavBar />
             <div className=" h-[90%] flex">
                 <EmployerSideBar />
-                <div className="h-full w-full bg-gray-200 rounded-tl-4xl p-10 overflow-y-scroll ">
+                <div className="h-full w-full bg-gray-200 rounded-tl-4xl p-10 overflow-y-auto ">
                     
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
                             Recruitment Reports

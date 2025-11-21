@@ -165,37 +165,51 @@
 
 // export default EmployerDashboard;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EmployerNavBar from "../../components/employer/EmployerNavBar";
 import EmployerSideBar from "../../components/employer/EmployerSideBar";
 import { Briefcase, Users, Calendar, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const EmployerDashboard = () => {
 
     const navigate = useNavigate();
     const date = new Date();
-    const { employerId } = useParams();
+    const [jobs, setJobs] = useState([]);
+    const [search, setSearch] = useState("");
+    const employerId = JSON.parse(localStorage.getItem("user"))?.id;
+
+    const loadJobs = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/api/job/employer/${employerId}/all`
+            );
+            setJobs(response.data);
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to fetch jobs");
+        }
+    };
+
+    useEffect(() => {
+        loadJobs();
+    }, []);
+
+    const filteredJobs = jobs.filter((job) =>
+        job.jobTitle.toLowerCase().includes(search.toLowerCase())
+    );
+
+    console.log(filteredJobs);
+
 
     // Mock Stats = Later backend API will update these
     const stats = [
         { title: "Jobs Posted", value: 12, icon: <Briefcase size={40} className="text-indigo-600" /> },
         { title: "Applications Received", value: 43, icon: <Users size={40} className="text-indigo-600" /> },
         { title: "Interviews Scheduled", value: 7, icon: <Calendar size={40} className="text-indigo-600" /> },
-    ];
-
-    // Mock Data – top 5 items
-    const recentJobs = [
-        { title: "Frontend Developer", date: "12 Nov 2025" },
-        { title: "Java Fullstack Engineer", date: "10 Nov 2025" },
-        { title: "UI/UX Designer", date: "08 Nov 2025" },
-        { title: "HR Executive", date: "07 Nov 2025" },
-        { title: "QA Tester", date: "06 Nov 2025" },
-        { title: "QA Tester", date: "06 Nov 2025" },
-        { title: "QA Tester", date: "06 Nov 2025" },
-        { title: "QA Tester", date: "06 Nov 2025" },
-
     ];
 
     const upcomingInterviews = [
@@ -219,7 +233,7 @@ const EmployerDashboard = () => {
             <EmployerNavBar />
             <div className="h-[90%] flex">
                 <EmployerSideBar />
-                <div className="h-full w-full bg-gray-200 rounded-tl-4xl rounded-tr-4xl p-10 overflow-y-scroll">
+                <div className="h-full w-full bg-gray-200 rounded-tl-4xl rounded-tr-4xl p-10 overflow-y-auto">
 
                     {/* Stats Cards */}
                     <div className="flex gap-5 justify-center mb-10">
@@ -239,19 +253,19 @@ const EmployerDashboard = () => {
                         ))} */}
 
                         <button
-                            onClick={() => navigate('/employer/jobs-posted')}
+                            onClick={() => navigate(`/employer/${employerId}/jobs-posted`)}
                             className="bg-white flex gap-10 h-40 w-60 p-6 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-100">
                             <div className="flex items-center justify-center">
                                 <Briefcase size={70} className="text-violet-400" />
                             </div>
                             <div className="w-40 text-center">
-                                <p className="text-5xl font-bold text-violet-400">10</p>
+                                <p className="text-5xl font-bold text-violet-400">{filteredJobs.length}</p>
                                 <h3 className="text-gray-600 font-md">Jobs Posted</h3>
                             </div>
                         </button>
 
                         <button
-                            onClick={() => navigate('/employer/applications-received')}
+                            onClick={() => navigate(`/employer/${employerId}/applications-received`)}
                             className="bg-white flex gap-10 h-40 w-60 p-6 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-100">
                             <div className="flex items-center justify-center">
                                 <User size={70} className="text-violet-400" />
@@ -263,7 +277,7 @@ const EmployerDashboard = () => {
                         </button>
 
                         <button
-                            onClick={() => navigate('/employer/interview-details')}
+                            onClick={() => navigate(`/employer/${employerId}/interview-details`)}
                             className="bg-white flex gap-10 h-40 w-60 p-6 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-100">
                             <div className="flex items-center justify-center">
                                 <Calendar size={70} className="text-violet-400" />
@@ -287,21 +301,27 @@ const EmployerDashboard = () => {
                         </div>
                     </div>
 
-                    {/* --- TOP 5 SECTIONS --- */}
                     <div className="">
-
-                        {/* Recent Job Posts */}
-                        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 mb-5">
+                        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 mb-5 min-h-55">
                             <div>
                                 <h2 className="text-xl font-semibold mb-3 text-violet-400">Recent Job Posts</h2>
                             </div>
                             <div className="flex gap-6 mt-5 flex-wrap">
-                                {recentJobs.map((job, index) => (
-                                    <div key={index} className="p-3 w-55 rounded-xl bg-gray-200">
-                                        <p className="font-semibold">{job.title}</p>
-                                        <p className="text-gray-500 text-sm">{job.date}</p>
-                                    </div>
-                                ))}
+
+                                {filteredJobs.length === 0 ? (
+                                    <p className="text-gray-500 text-center">No jobs posted yet.</p>
+                                ) : (
+                                    filteredJobs.slice(0,5).map((job, index) => (
+                                        <div key={index} className="p-3 w-55 rounded-xl bg-gray-100 backdrop-blur-2xl border-2 border-gray-200">
+                                            <h1 className="font-bold text-black text-xl">{job.designation}</h1>
+                                            <p className="text-gray-500 text-sm mt-1">Posted On: {job.postedDate}</p>
+                                            <p className="text-gray-500 text-sm mt-1">Type: {job.jobType}</p>
+                                            <p className="text-gray-500 text-sm mt-1">Location: {job.location}</p>
+                                        </div>
+                                    ))
+
+                                )}
+                                
                             </div>
                         </div>
 

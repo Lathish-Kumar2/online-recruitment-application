@@ -19,13 +19,12 @@ const ApplicationsReceived = () => {
     );
 
     return (
-        <div className="bg-white h-screen w-full">
+      <div className="bg-white h-screen w-full px-15 py-3 ">
             <EmployerNavBar />
 
             <div className="flex h-[90%]">
                 <EmployerSideBar />
-
-                <div className="w-full bg-gray-200 p-10 rounded-tl-4xl rounded-tr-4xl">
+                <div className="h-full w-full bg-gray-200 rounded-tl-4xl rounded-tr-4xl p-10 overflow-y-auto">
 
                     <h1 className="text-3xl font-semibold mb-6">Applications Received</h1>
 
