@@ -56,7 +56,11 @@ const Login = () => {
 
       // Redirect to employer dashboard
       setTimeout(() => {
-        navigate(`/employer/${user.id}/dashboard`);
+        if (role === "candidate") {
+          navigate(`/candidate/${user.id}/dashboard`);
+        } else {
+          navigate(`/employer/${user.id}/dashboard`);
+        }
 
       }, 1200);
     } catch (err) {

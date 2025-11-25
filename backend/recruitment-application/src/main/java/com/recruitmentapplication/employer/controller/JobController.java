@@ -27,6 +27,31 @@ public class JobController {
         return jobService.getJobsByEmployer(employerId);
     }
 
+    @GetMapping("/all")
+    public List<Job> getAllJobs() {
+        return jobService.getAllJobs();
+    }
+
+    @GetMapping("/locations")
+    public List<String> getLocations() {
+    return jobService.getAllLocations();
+    }
+    
+    @GetMapping("/job-types")
+    public List<String> getJobTypes() {
+    return jobService.getAllJobTypes();
+    }
+    
+    @GetMapping("/salaries")
+    public List<String> getSalaries() {
+    return jobService.getAllSalaries();
+    }
+
+    @GetMapping("/{jobId}")
+    public Job getJobById(@PathVariable Long jobId) {
+    return jobService.getJobById(jobId);
+    }
+    
     @PutMapping("/employer/{employerId}/update/{jobId}")
     public Job updateJob(
             @PathVariable Long employerId,

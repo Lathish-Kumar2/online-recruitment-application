@@ -128,4 +128,26 @@ public class JobService {
         repo.delete(job);
     }
 
+    public List<Job> getAllJobs() {
+        return repo.findAll();
+    }
+
+    public List<String> getAllLocations() {
+        return repo.findDistinctLocations();
+    }
+    
+    public List<String> getAllJobTypes() {
+        return repo.findDistinctJobTypes();
+    }
+    
+    public List<String> getAllSalaries() {
+        return repo.findDistinctSalaries();
+    }
+    
+    public Job getJobById(Long jobId) {
+        return repo.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+    }
+    
+
 }
