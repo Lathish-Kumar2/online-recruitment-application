@@ -166,7 +166,7 @@
 // export default EmployerDashboard;
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import EmployerNavBar from "../../components/employer/EmployerNavBar";
 import EmployerSideBar from "../../components/employer/EmployerSideBar";
 import { Briefcase, Users, Calendar, User } from "lucide-react";
@@ -180,7 +180,10 @@ const EmployerDashboard = () => {
     const date = new Date();
     const [jobs, setJobs] = useState([]);
     const [search, setSearch] = useState("");
+    const [interviews, setInterviews] = useState([]);
+    const [applications, setApplications] = useState([]);
     const employerId = JSON.parse(localStorage.getItem("user"))?.id;
+
 
     const loadJobs = async () => {
         try {
@@ -194,39 +197,68 @@ const EmployerDashboard = () => {
         }
     };
 
+    const loadInterviews = async () => {
+        const res = await axios.get(`http://localhost:8080/api/employer/${employerId}/interviews`);
+
+        const data = res.data;
+
+        console.log("Employer ID:", employerId);
+
+        // Prevent crash
+        if (!Array.isArray(data)) {
+            console.error("Expected array but got:", data);
+            setInterviews([]);
+            return;
+        }
+
+        setInterviews(data);
+    };
+
+    const loadApplications = async () => {
+        try {
+            const res = await axios.get(
+                `http://localhost:8080/api/employer/${employerId}/applications`
+            );
+            setApplications(res.data);
+        } catch (err) {
+            console.error("Failed to load applications:", err);
+        }
+    };
+
+    // const filteredData = applications.filter((app) =>
+    //     app.jobTitle.toLowerCase().includes(search.toLowerCase())
+    // );
+
+
     useEffect(() => {
-        loadJobs();
+        loadJobs(), loadInterviews(), loadApplications();
     }, []);
 
     const filteredJobs = jobs.filter((job) =>
         job.jobTitle.toLowerCase().includes(search.toLowerCase())
     );
 
-    console.log(filteredJobs);
+    console.log(applications);
+    
+
+    // console.log(filteredJobs);
+    // console.log(interviews);
 
 
-    // Mock Stats = Later backend API will update these
-    const stats = [
-        { title: "Jobs Posted", value: 12, icon: <Briefcase size={40} className="text-indigo-600" /> },
-        { title: "Applications Received", value: 43, icon: <Users size={40} className="text-indigo-600" /> },
-        { title: "Interviews Scheduled", value: 7, icon: <Calendar size={40} className="text-indigo-600" /> },
-    ];
+    // // Mock Stats = Later backend API will update these
+    // const stats = [
+    //     { title: "Jobs Posted", value: 12, icon: <Briefcase size={40} className="text-indigo-600" /> },
+    //     { title: "Applications Received", value: 43, icon: <Users size={40} className="text-indigo-600" /> },
+    //     { title: "Interviews Scheduled", value: 7, icon: <Calendar size={40} className="text-indigo-600" /> },
+    // ];
 
-    const upcomingInterviews = [
-        { candidate: "Rahul Sharma", job: "Frontend Developer", date: "13 Nov 2025" },
-        { candidate: "Sneha R", job: "UI/UX Designer", date: "14 Nov 2025" },
-        { candidate: "Vikram", job: "Java Developer", date: "15 Nov 2025" },
-        { candidate: "Harini", job: "QA Tester", date: "16 Nov 2025" },
-        { candidate: "Joseph", job: "HR Executive", date: "17 Nov 2025" },
-    ];
-
-    const recentApplications = [
-        { name: "Arun Kumar", job: "Frontend Developer", date: "12 Nov 2025" },
-        { name: "Priya S", job: "Java Developer", date: "11 Nov 2025" },
-        { name: "Manish", job: "QA Tester", date: "11 Nov 2025" },
-        { name: "Leena", job: "UI/UX Designer", date: "10 Nov 2025" },
-        { name: "Sanjay", job: "HR Executive", date: "10 Nov 2025" },
-    ];
+    // const recentApplications = [
+    //     { name: "Arun Kumar", job: "Frontend Developer", date: "12 Nov 2025" },
+    //     { name: "Priya S", job: "Java Developer", date: "11 Nov 2025" },
+    //     { name: "Manish", job: "QA Tester", date: "11 Nov 2025" },
+    //     { name: "Leena", job: "UI/UX Designer", date: "10 Nov 2025" },
+    //     { name: "Sanjay", job: "HR Executive", date: "10 Nov 2025" },
+    // ];
 
     return (
         <div className="bg-white h-screen w-full px-15 py-3">
@@ -271,7 +303,7 @@ const EmployerDashboard = () => {
                                 <User size={70} className="text-violet-400" />
                             </div>
                             <div className="w-40 text-center">
-                                <p className="text-5xl font-bold text-violet-400">40</p>
+                                <p className="text-5xl font-bold text-violet-400">{applications.length}</p>
                                 <h3 className="text-gray-600 font-md">Applications Received</h3>
                             </div>
                         </button>
@@ -283,8 +315,8 @@ const EmployerDashboard = () => {
                                 <Calendar size={70} className="text-violet-400" />
                             </div>
                             <div className="w-40 text-center">
-                                <p className="text-5xl font-bold text-violet-400">5</p>
-                                <h3 className="text-gray-600 font-md">Interviews Scheduled</h3>
+                                <p className="text-5xl font-bold text-violet-400">{interviews.length}</p>
+                                <h3 className="text-gray-600 font-md">Interview Details</h3>
                             </div>
                         </button>
 
@@ -302,58 +334,100 @@ const EmployerDashboard = () => {
                     </div>
 
                     <div className="">
-                        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 mb-5 min-h-55">
+                        <div className="bg-white p-5 rounded-xl shadow-md border border-violet-400 mb-5 min-h-55">
                             <div>
                                 <h2 className="text-xl font-semibold mb-3 text-violet-400">Recent Job Posts</h2>
                             </div>
+                           
                             <div className="flex gap-6 mt-5 flex-wrap">
 
                                 {filteredJobs.length === 0 ? (
-                                    <p className="text-gray-500 text-center">No jobs posted yet.</p>
+                                    <p className="text-gray-500 mt-10">No jobs posted yet.</p>
                                 ) : (
-                                    filteredJobs.slice(0,5).map((job, index) => (
-                                        <div key={index} className="p-3 w-55 rounded-xl bg-gray-100 backdrop-blur-2xl border-2 border-gray-200">
-                                            <h1 className="font-bold text-black text-xl">{job.designation}</h1>
-                                            <p className="text-gray-500 text-sm mt-1">Posted On: {job.postedDate}</p>
-                                            <p className="text-gray-500 text-sm mt-1">Type: {job.jobType}</p>
-                                            <p className="text-gray-500 text-sm mt-1">Location: {job.location}</p>
+                                    filteredJobs.slice(0, 8).map((job, index) => (
+                                        <div key={index} className="p-3 w-55 rounded-xl bg-gray-100 backdrop-blur-2xl border-2 h-50 border-gray-200">
+                                            <div className="w-full h-15 py-1.5">
+                                                <h1 className="text-lg text-center font-bold leading-tight mb-2">{job.designation}</h1>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-semibold text-gray-500">Posted On: {job.postedDate}</p>
+                                                <p className="text-sm font-semibold text-gray-500">Type: {job.jobType}</p>
+                                                <p className="text-sm font-semibold text-gray-500">Location: {job.location}</p>
+                                            </div>
+
                                         </div>
                                     ))
 
                                 )}
-                                
+
                             </div>
+                             <a
+                                href={`/employer/${employerId}/jobs-posted`}
+                                className="text-violet-400 text-sm mt-5 ml-2 block font-semibold"
+                            >
+                                View more jobs →
+                            </a>
                         </div>
 
                         {/* Upcoming Interviews */}
-                        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 mb-5">
+                        <div className="bg-white p-5 rounded-xl shadow-md border border-violet-400 mb-5 min-h-55">
                             <div>
                                 <h2 className="text-xl font-semibold mb-3 text-violet-400">Upcoming Interviews</h2>
                             </div>
                             <div className="flex gap-6 mt-5 flex-wrap">
-                                {upcomingInterviews.map((data, index) => (
-                                    <div key={index} className="p-3 w-55 rounded-xl bg-gray-200">
-                                        <p className="font-semibold">{data.candidate}</p>
-                                        <p className="text-gray-500 text-sm">{data.job}</p>
-                                        <p className="text-gray-500 text-sm">{data.date}</p>
-                                    </div>
-                                ))}
+                                {interviews.length === 0 ? (
+                                    <p className="text-gray-500 mt-10">No interviews scheduled yet.</p>
+                                ) : (
+                                    interviews.slice(0, 8).map((data, index) => (
+                                        data.status === "In Progress" && (
+                                            <div key={index} className="p-3 w-55 rounded-xl h-50 bg-gray-100 backdrop-blur-2xl border-2 border-gray-200">
+                                                <div className="w-full h-7 py-1">
+                                                    <h1 className="text-lg text-center font-bold leading-tight">{data.candidateName}</h1>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-semibold text-gray-500 text-center py-2">{data.jobTitle}</p>
+                                                    <p className="text-sm font-semibold text-gray-500">Date: {data.date} </p>
+                                                    <p className="text-sm font-semibold text-gray-500">Time: {data.time} </p>
+                                                    <p className="text-sm font-semibold text-gray-500">Mode: {data.mode}</p>
+                                                    <p className="text-sm font-semibold text-gray-500">Status: {data.status}</p>
+                                                </div>
+                                            </div>
+                                        )
+
+                                    )))}
                             </div>
+                             <a
+                                href={`/employer/${employerId}/interview-details`}
+                                className="text-violet-400 text-sm mt-5 ml-2 block font-semibold"
+                            >
+                                View all interviews →
+                            </a>
                         </div>
                         {/* Recent Applications */}
-                        <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 mb-5">
+                        <div className="bg-white p-5 rounded-xl shadow-md border border-violet-400 mb-5 min-h-55">
                             <div>
                                 <h2 className="text-xl font-semibold mb-3 text-violet-400">Recent Applications</h2>
                             </div>
                             <div className="flex gap-6 mt-5 flex-wrap">
-                                {recentApplications.map((data, index) => (
-                                    <div key={index} className="p-3 w-55 rounded-xl bg-gray-200">
-                                        <p className="font-semibold">{data.name}</p>
-                                        <p className="text-gray-500 text-sm">{data.job}</p>
-                                        <p className="text-gray-500 text-sm">{data.date}</p>
-                                    </div>
-                                ))}
+                                {applications.length === 0 ? (
+                                    <p className="text-gray-500 mt-10 ml-2">No applications received yet.</p>
+                                ) : (
+
+                                    applications.slice(0, 8).map((data, index) => (
+                                        <div key={index} className="p-3 w-55 rounded-xl h-50 bg-gray-100 backdrop-blur-2xl border-2 border-gray-200">
+                                            <h1 className="text-lg text-center font-bold leading-tight">{data.candidateName}</h1>
+                                            <p className="text-sm font-semibold text-gray-500 text-center py-2">{data.jobTitle? data.jobTitle : "General Interest"}</p>
+                                            <p className="text-sm font-semibold text-gray-500">Date: {data.appliedDate}</p>
+                                            <p className="text-sm font-semibold text-gray-500">Status: {data.interviewStatus}</p>
+                                        </div>
+                                    )))}
                             </div>
+                             <a
+                                href={`/employer/${employerId}/applications-received`}
+                                className="text-violet-400 text-sm mt-5 ml-2 block font-semibold"
+                            >
+                                View all applications →
+                            </a>
                         </div>
 
                     </div>

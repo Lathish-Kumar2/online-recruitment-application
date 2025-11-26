@@ -15,6 +15,7 @@ import Reports from './pages/employer/Reports.jsx'
 import EmployerProfile from './pages/employer/EmployerProfile.jsx'
 import JobsPosted from './components/employer/JobsPosted.jsx'
 import ApplicationsReceived from './components/employer/ApplicationsReceived.jsx'
+import CandidateProfile from './pages/candidate/CandidateProfile.jsx'
 
 
 
@@ -45,6 +46,10 @@ const App = () => {
           <Route path="/employer/:employerId/reports" element={<Reports />} />
           <Route path="/employer/:employerId/jobs-posted" element={<JobsPosted />} />
           <Route path="/employer/:employerId/applications-received" element={<ApplicationsReceived />} />
+          <Route path="/employer/:employerId/candidate/:candidateId" element={<CandidateProfile />} />
+          <Route path="/employer/:employerId/candidates" element={<CandidateSearch />} />
+          {/* <Route path="/employer/:employerId/applications" element={<ApplicationsReceived />} /> */}
+
 
           <Route path="*" element={<NotFound />} />
 

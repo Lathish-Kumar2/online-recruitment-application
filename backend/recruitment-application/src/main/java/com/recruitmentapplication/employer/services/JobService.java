@@ -71,20 +71,6 @@ public class JobService {
         job.setLocation(request.getLocation());
         job.setDescription(request.getDescription());
 
-        // // ------ Fix for postedDate -------
-        // if (request.getPostedDate() != null) {
-        // job.setPostedDate(Date.valueOf(request.getPostedDate()));
-        // } else {
-        // job.setPostedDate(new Date(System.currentTimeMillis()));
-        // }
-
-        // // ------ Fix for createdAt -------
-        // if (request.getCreatedAt() != null) {
-        // job.setCreatedAt(request.getCreatedAt());
-        // } else {
-        // job.setCreatedAt(LocalDateTime.now());
-        // }
-
         job.setEmployerId(request.getEmployerId());
 
         return repo.save(job);

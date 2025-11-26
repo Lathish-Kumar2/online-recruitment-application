@@ -116,6 +116,10 @@ const Login = () => {
                   onChange={handleChange}
                   className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                   name="password"
+                  autoComplete="new-password"
+                  autoCorrect="Off"
+                  autoCapitalize="Off"
+                  spellCheck="Off"
                 />
                 <button
                   onClick={() => navigate(`/forgot-password?role=${role}`)}

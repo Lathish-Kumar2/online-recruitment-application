@@ -25,7 +25,7 @@ public class Job {
     @Column(columnDefinition = "TEXT")
     private String description;
     
-    private Long employerId; // 🔥 connects job to employer
+    private Long employerId;
 
     public Job() {}
 
