@@ -1,10 +1,13 @@
 package com.recruitmentapplication.employer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "employers")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,9 +45,13 @@ public class Employer {
         this.phone = phone;
     }
 
-    public long getId() {
+    public Employer(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
         return id;
-    }   
+    }      
     
     public void setId(Long id) {
         this.id = id;

@@ -25,7 +25,10 @@ public class Job {
     @Column(columnDefinition = "TEXT")
     private String description;
     
-    private Long employerId; // 🔥 connects job to employer
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employer_id")
+    private Employer employer;
+
 
     public Job() {}
 
@@ -53,8 +56,12 @@ public class Job {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Long getEmployerId() { return employerId; }
-    public void setEmployerId(Long employerId) { this.employerId = employerId; }
+    public Employer getEmployer() {
+        return employer;
+    }
+    public void setEmployer(Employer employer) {
+        this.employer = employer;
+    }
 
     public Date getPostedDate() { return postedDate; }
     public void setPostedDate(Date postedDate) { this.postedDate = postedDate; }

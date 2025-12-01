@@ -169,6 +169,7 @@ const CandidateDashboard = () => {
                   >
                     <h1 className="font-bold text-black text-lg">{job.designation}</h1>
                     <p className="text-gray-600 text-sm mt-1">Location: {job.location}</p>
+                    <p className="text-gray-600 text-sm mt-1">Company Name: {job.employer?.companyName}</p>
                     <p className="text-gray-600 text-sm mt-1">Salary: {job.salary}</p>
                     <p className="text-gray-600 text-sm mt-1">Type: {job.jobType}</p>
                   </div>
