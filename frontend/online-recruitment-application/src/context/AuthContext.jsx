@@ -1,29 +1,55 @@
 import React, { createContext, useState, useEffect } from "react";
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-   
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+  const [candidate, setCandidate] = useState(() => {
+    const storedCandidate = localStorage.getItem("candidate");
+    return storedCandidate ? JSON.parse(storedCandidate) : null;
   });
 
-  // Save user data whenever it changes
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [user]);
+  const [employer, setEmployer] = useState(() => {
+    const storedEmployer = localStorage.getItem("employer");
+    return storedEmployer ? JSON.parse(storedEmployer) : null;
+  });
 
-  const login = (userData) => setUser(userData);
-  const logout = () => setUser(null);
+  // Save candidate whenever it changes
+  useEffect(() => {
+    if (candidate) {
+      localStorage.setItem("candidate", JSON.stringify(candidate));
+    } else {
+      localStorage.removeItem("candidate");
+    }
+  }, [candidate]);
+
+  // Save employer whenever it changes
+  useEffect(() => {
+    if (employer) {
+      localStorage.setItem("employer", JSON.stringify(employer));
+    } else {
+      localStorage.removeItem("employer");
+    }
+  }, [employer]);
+
+  const login = (user, role) => {
+    if (role === "candidate") setCandidate(user);
+    else setEmployer(user);
+  };
+
+  const logout = (role) => {
+    if (role === "candidate") setCandidate(null);
+    else setEmployer(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        candidate,
+        employer,
+        login,
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

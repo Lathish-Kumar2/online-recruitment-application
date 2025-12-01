@@ -62,14 +62,13 @@ const SignUp = () => {
 
         });
       } else {
-        // response = await axios.post("http://localhost:8080/api/candidates/signup", {
-        //   fullName: formData.fullName,
-        //   phone: formData.phone,
-        //   email: formData.email,
-        //   password: formData.password,
-        // });
-        window.alert("Candidate signup is currently disabled.");
-        return;
+        response = await axios.post("http://localhost:8080/api/candidates/signup", {
+          fullName: formData.fullName,
+          phone: formData.phone,
+          email: formData.email,
+          password: formData.password,
+        });
+        
       }
 
       toast.success("Account created successfully!");
