@@ -13,14 +13,23 @@ import java.util.Optional;
 @Repository
 public interface InterviewRepository extends JpaRepository<Interview, Long> {
 
-    @Query("SELECT new com.recruitmentapplication.dto.InterviewDTO(" +
-            "i.jobTitle, e.companyName, i.date, a.appliedDate, " +
-            "i.status, i.comments, i.remarks) " +
-            "FROM Interview i " +
-            "LEFT JOIN i.employer e " +
-            "LEFT JOIN i.application a " +
-            "WHERE i.candidateId = :candidateId")
-   List<InterviewDTO> findInterviewsWithCompany(@Param("candidateId") Long candidateId);
+   @Query("""
+    SELECT new com.recruitmentapplication.dto.InterviewDTO(
+        i.jobTitle,
+        e.companyName,
+        i.date,
+        a.appliedDate,
+        i.status,
+        i.comments,
+        i.remarks
+    )
+    FROM Interview i
+    JOIN Employer e ON i.employerId = e.id
+    LEFT JOIN Application a ON i.applicationId = a.id
+    WHERE i.candidateId = :candidateId
+""")
+List<InterviewDTO> findInterviewsWithCompany(@Param("candidateId") Long candidateId);
+
 
 
     void deleteByIdAndEmployerId(Long id, Long employerId);

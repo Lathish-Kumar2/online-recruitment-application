@@ -15,6 +15,30 @@ const JobDetails = () => {
       .catch((err) => console.error("Error fetching job details", err));
   }, [jobId]);
 
+  // APPLY TO JOB FUNCTION
+  const applyToJob = async () => {
+    try {
+      const candidateData = JSON.parse(localStorage.getItem("candidate"));
+  
+      if (!candidateData || !candidateData.id) {
+        alert("Please login as a candidate before applying.");
+        return;
+      }
+  
+      const candidateId = candidateData.id;
+      const employerId = job.employer.id; // IMPORTANT
+  
+      await axios.post(
+        `http://localhost:8080/api/employer/${employerId}/applications/apply/${jobId}/candidate/${candidateId}`
+      );
+  
+      alert("Application submitted successfully!");
+    } catch (error) {
+      console.error("Error applying to job:", error);
+      alert("Failed to apply. You may have already applied.");
+    }
+  };  
+
   if (!job) return <p className="p-10 text-lg">Loading...</p>;
 
   return (
@@ -27,8 +51,9 @@ const JobDetails = () => {
         <div className="h-full w-full bg-gray-200 rounded-tl-4xl rounded-tr-4xl p-10 overflow-y-auto">
           <div className="bg-white p-8 rounded-xl shadow-md border max-w-3xl mx-auto">
 
-            <h1 className="text-3xl font-bold text-violet-500 mb-3">{job.job_title}</h1>
-            <p className="text-lg text-gray-700 mb-5">{job.designation}</p>
+          <h1 className="text-3xl font-bold text-violet-500 mb-1">{job.jobTitle}</h1>
+          <p className="text-lg text-gray-800 font-semibold mb-4">{job.employer?.companyName}</p>
+          <p className="text-lg text-gray-700 mb-5">{job.designation}</p>
 
             <div className="mb-5">
               <p className="text-gray-600"><strong>Location:</strong> {job.location}</p>
@@ -43,7 +68,7 @@ const JobDetails = () => {
 
             <button
               className="mt-8 px-6 py-3 bg-violet-500 text-white rounded-lg shadow hover:bg-violet-600"
-              onClick={() => alert("Apply feature coming next!")}
+              onClick={applyToJob}
             >
               Apply to this Job
             </button>

@@ -1,5 +1,6 @@
 package com.recruitmentapplication.employer.controller;
 
+import com.recruitmentapplication.employer.model.Interview;
 import com.recruitmentapplication.dto.InterviewDTO;
 import com.recruitmentapplication.employer.services.InterviewService;
 
@@ -9,21 +10,56 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/candidate/{candidateId}/interviews")
-@CrossOrigin(
-origins = "*",
-allowedHeaders = "*",
-methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class InterviewController {
 
-@Autowired
-private InterviewService service;
-
-// READ: Get interviews with company name joined
-@GetMapping
-public List<InterviewDTO> getInterviews(@PathVariable Long candidateId) {
-    return service.getInterviews(candidateId);
-}
+    @Autowired
+    private InterviewService service;
 
 
+    // --------------------------
+    // CANDIDATE FETCH INTERVIEWS
+    // --------------------------
+    @GetMapping("/candidate/{candidateId}/interviews")
+    public List<InterviewDTO> getInterviews(@PathVariable Long candidateId) {
+        return service.getInterviews(candidateId);
+    }
+
+
+    // --------------------------
+    // EMPLOYER SCHEDULE INTERVIEW
+    // --------------------------
+    @PostMapping("/employer/{employerId}/interviews")
+    public Interview scheduleInterview(
+            @PathVariable Long employerId,
+            @RequestBody Interview interview
+    ) {
+        return service.scheduleInterview(employerId, interview);
+    }
+
+
+    // --------------------------
+    // EMPLOYER DELETE INTERVIEW
+    // --------------------------
+    @DeleteMapping("/employer/{employerId}/interviews/{interviewId}")
+    public void deleteInterview(
+            @PathVariable Long employerId,
+            @PathVariable Long interviewId
+    ) {
+        service.deleteInterview(employerId, interviewId);
+    }
+
+
+    // --------------------------
+    // EMPLOYER UPDATE STATUS
+    // --------------------------
+    @PutMapping("/employer/{employerId}/interviews/update-status/{interviewId}")
+    public Interview updateStatus(
+            @PathVariable Long employerId,
+            @PathVariable Long interviewId,
+            @RequestBody Interview updated
+    ) {
+        return service.updateInterviewStatus(employerId, interviewId, updated);
+    }
 }

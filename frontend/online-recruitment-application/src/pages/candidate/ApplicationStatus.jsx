@@ -72,7 +72,7 @@ console.log(interviews)
                 <tr className="text-left bg-purple-100 text-gray-700 rounded-xl">
                   <th className="p-4 rounded-l-xl">Job Title</th>
                   <th className="p-4">Company</th>
-                  <th className="p-4">Applied On</th>
+                 
                   <th className="p-4">Interview Date</th>
                   <th className="p-4">Status</th>
                   <th className="p-4">Comments</th>
@@ -88,11 +88,7 @@ console.log(interviews)
                   >
                     <td className="p-4 font-medium">{interview.jobTitle}</td>
                     <td className="p-4">{interview.companyName}</td>
-                    <td className="p-4">
-                      {interview.appliedDate
-                        ? new Date(interview.appliedDate).toLocaleDateString()
-                        : "Not available"}
-                    </td>
+                    
 
 
 

@@ -44,7 +44,9 @@ package com.recruitmentapplication.employer.services;
 
 import com.recruitmentapplication.dto.JobCreateRequest;
 import com.recruitmentapplication.employer.model.Job;
+import com.recruitmentapplication.employer.model.Employer;
 import com.recruitmentapplication.employer.repository.JobRepository;
+import com.recruitmentapplication.employer.repository.EmployerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +59,10 @@ import java.util.List;
 public class JobService {
 
     @Autowired
-    private JobRepository repo;
+    private JobRepository jobRepo;
+
+    @Autowired
+    private EmployerRepository employerRepo;
 
     public Job createJob(JobCreateRequest request) {
 
@@ -71,40 +76,35 @@ public class JobService {
         job.setLocation(request.getLocation());
         job.setDescription(request.getDescription());
 
-        // // ------ Fix for postedDate -------
-        // if (request.getPostedDate() != null) {
-        // job.setPostedDate(Date.valueOf(request.getPostedDate()));
-        // } else {
-        // job.setPostedDate(new Date(System.currentTimeMillis()));
-        // }
+        Employer employer = employerRepo.findById(request.getEmployerId())
+                .orElseThrow(() -> new RuntimeException("Employer not found"));
 
-        // // ------ Fix for createdAt -------
-        // if (request.getCreatedAt() != null) {
-        // job.setCreatedAt(request.getCreatedAt());
-        // } else {
-        // job.setCreatedAt(LocalDateTime.now());
-        // }
+        job.setEmployer(employer);
 
-        job.setEmployerId(request.getEmployerId());
-
-        return repo.save(job);
-    }
-
-    public List<Job> getJobs() {
-        return repo.findAll();
+        return jobRepo.save(job);
     }
 
     public List<Job> getJobsByEmployer(Long employerId) {
-        return repo.findByEmployerId(employerId);
+        Employer employer = employerRepo.findById(employerId)
+                .orElseThrow(() -> new RuntimeException("Employer not found"));
+
+        return jobRepo.findByEmployer(employer);
+    }
+
+    public Job getJobById(Long jobId) {
+        return jobRepo.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
     }
 
     public Job updateJob(Long employerId, Long jobId, JobCreateRequest request) {
-        Job job = repo.findById(jobId)
+
+        Job job = jobRepo.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        if (!job.getEmployerId().equals(employerId)) {
-            throw new RuntimeException("Unauthorized: This job does not belong to you");
-        }
+       if (!job.getEmployer().getId().equals(employerId)) {
+    throw new RuntimeException("Unauthorized: This job does not belong to you");
+}
+
 
         job.setJobTitle(request.getJobTitle());
         job.setSalary(request.getSalary());
@@ -114,40 +114,34 @@ public class JobService {
         job.setJobType(request.getJobType());
         job.setLocation(request.getLocation());
 
-        return repo.save(job);
+        return jobRepo.save(job);
     }
 
     public void deleteJob(Long employerId, Long jobId) {
-        Job job = repo.findById(jobId)
+
+        Job job = jobRepo.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        if (!job.getEmployerId().equals(employerId)) {
+        if (!job.getEmployer().getId().equals(employerId)) {
             throw new RuntimeException("Unauthorized: Cannot delete this job");
         }
 
-        repo.delete(job);
+        jobRepo.delete(job);
     }
 
     public List<Job> getAllJobs() {
-        return repo.findAll();
+        return jobRepo.findAll();
     }
 
     public List<String> getAllLocations() {
-        return repo.findDistinctLocations();
+        return jobRepo.findDistinctLocations();
     }
-    
-    public List<String> getAllJobTypes() {
-        return repo.findDistinctJobTypes();
-    }
-    
-    public List<String> getAllSalaries() {
-        return repo.findDistinctSalaries();
-    }
-    
-    public Job getJobById(Long jobId) {
-        return repo.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
-    }
-    
 
+    public List<String> getAllJobTypes() {
+        return jobRepo.findDistinctJobTypes();
+    }
+
+    public List<String> getAllSalaries() {
+        return jobRepo.findDistinctSalaries();
+    }
 }

@@ -1,5 +1,6 @@
 package com.recruitmentapplication.employer.repository;
 
+import com.recruitmentapplication.employer.model.Employer;
 import com.recruitmentapplication.employer.model.Job;
 
 import java.util.List;
@@ -9,7 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface JobRepository extends JpaRepository<Job, Long> {
-    List<Job> findByEmployerId(Long employerId);
+    List<Job> findByEmployer(Employer employer);
+
     @Query("SELECT DISTINCT j.location FROM Job j")
     List<String> findDistinctLocations();
 

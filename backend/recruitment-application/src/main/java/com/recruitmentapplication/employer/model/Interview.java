@@ -44,9 +44,8 @@ public class Interview {
     // ---------------------------------------
     // JOIN WITH APPLICATION (NEW PART BELOW)
     // ---------------------------------------
-
-    @Column(name = "application_id")
-    private Long applicationId;
+@Column(name = "application_id", nullable = false)
+private Long applicationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", insertable = false, updatable = false)

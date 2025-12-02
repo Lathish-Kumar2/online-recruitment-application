@@ -14,20 +14,20 @@ const Login = () => {
 
   // determine role
   let role = role1 === role2 ? "candidate" : "employer";
-
+ 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
+ 
   useEffect(() => {
     document.title = `Login - ${role === "employer" ? "Employer" : "Candidate"}`;
   }, [role]);
-
+ 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+ 
   const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -86,7 +86,7 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Login as <span className="text-indigo-600 capitalize">{role}</span>
         </h2>
-
+ 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="h-120 grid grid-cols-2 gap-4 items-center">
             <div className="bg-[url('src/assets/login1.png')] bg-cover h-full"></div>
@@ -100,10 +100,11 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-1/2"
+                 
                   name="email"
                 />
               </div>
-
+ 
               <div>
                 <TextField
                   fullWidth
@@ -113,23 +114,25 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="w-1/2"
+                 
                   name="password"
                 />
                 <button
                   onClick={() => navigate(`/forgot-password?role=${role}`)}
                   className="text-sm text-gray-500 hover:text-indigo-600 cursor-pointer"
+                 
                 >
                   Forgot Password?
                 </button>
               </div>
-
+ 
               <button
                 type="submit"
                 className="w-1/2 bg-indigo-600 text-white py-3 ml-[20%] rounded-lg font-semibold hover:bg-indigo-700 transition cursor-pointer active:scale-95"
               >
                 Login
               </button>
-
+ 
               <div className="text-center mt-4 space-y-2">
                 <p className="text-sm text-gray-600">
                   Don’t have an account?{" "}
@@ -146,10 +149,12 @@ const Login = () => {
           </div>
         </form>
       </div>
-
+ 
       <ToastContainer position="top-center" />
     </div>
   );
 };
-
+ 
 export default Login;
+ 
+ 
